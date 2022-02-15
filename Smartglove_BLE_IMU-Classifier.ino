@@ -47,6 +47,11 @@ int nbGesture = 0;
 int oldNbGesture = 0;
 int gestureTriggered;
 
+// variables for button
+int buttonPin = 7;
+int oldButtonState = LOW;
+
+
 
 void setup() {
   Serial.begin(115200);
@@ -79,6 +84,7 @@ void setup() {
   pinMode(22, OUTPUT);
   pinMode(23, OUTPUT);
   pinMode(24, OUTPUT);
+  pinMode(buttonPin, INPUT);
   digitalWrite(22, HIGH);
   digitalWrite(23, HIGH);
   digitalWrite(24, HIGH);
@@ -141,6 +147,31 @@ void loop() {
     }
 
     while (peripheral.connected()) {
+
+
+      // read the button pin
+    int buttonState = digitalRead(buttonPin);
+
+    if (oldButtonState != buttonState) {
+      // button changed
+      oldButtonState = buttonState;
+
+      if (buttonState) {
+        Serial.println("button pressed");
+
+        // button is pressed, write 0x01 to turn the LED on
+        //ledCharacteristic.writeValue((byte)0x01);
+      } else {
+        Serial.println("button released");
+
+        // button is released, write 0x00 to turn the LED off
+        //ledCharacteristic.writeValue((byte)0x00);
+      }
+    }
+
+
+
+      
       float aX, aY, aZ, gX, gY, gZ;
       // wait for significant motion
       while (samplesRead == numSamples) {
